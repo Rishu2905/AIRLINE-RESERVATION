@@ -2,12 +2,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./FlightSearchPage.css";
+import axios from "axios";
+
+
 
 function FlightSearchPage() {
   const navigate = useNavigate();
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [date, setDate] = useState("");
+  const [flights, setFlights] = useState([]);
 
   // Swap origin & destination
   const swapLocations = () => {
@@ -16,9 +20,13 @@ function FlightSearchPage() {
   };
 
   // Search flights action
-  const handleSearch = () => {
-    alert(`Searching flights from ${from} to ${to} on ${date}`);
-    // TODO: Replace with your API call
+  const handleSearch = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/flights");
+      setFlights(response.data);
+    } catch (err) {
+      console.error("Error fetching flights:", err);
+    }
   };
 
   return (
@@ -38,7 +46,8 @@ function FlightSearchPage() {
           <button className="Mainbuttons" onClick={() => navigate("/login")}>Login</button>
           <button className="Signupbutton" onClick={() => navigate("/signup")}>Sign up</button>
           <button className="Mainbuttons" onClick={() => navigate("/booking-status")}>Booking Status</button>
-          <button className="Mainbuttons" onClick={() => navigate("/flight-details")}>Flight Details</button>
+          <button className="Mainbuttons" onClick={() => navigate("/flightdetails")}>Flight Details</button>
+          
         </div>
       </header>
 
