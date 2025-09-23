@@ -22,7 +22,7 @@ function FlightSearchPage() {
   // Search flights action
   const handleSearch = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/flights");
+      const response = await axios.get("http://localhost:5000/api/flight");
       setFlights(response.data);
     } catch (err) {
       console.error("Error fetching flights:", err);
