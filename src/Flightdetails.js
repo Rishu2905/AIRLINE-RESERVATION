@@ -4,15 +4,29 @@ import axios from 'axios';
 function Flightdetails() {
   const [flightData, setFlightData] = useState(null);
   const [flightNo,setflightNo] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleSearch = () =>{
+    setLoading(true); 
+    setFlightData(null);
+    setError(false); 
 
     axios.get(`http://localhost:5000/api/flight/${flightNo}`) // sending a get request which is recieved by server.js using .get
       .then(response => {
+        if (response.data){
         setFlightData(response.data);
+        }
+        else {
+          setError(true);
+        }
+        setLoading(false);
       })
       .catch(error => {
-        console.error('Error fetching data', error);
+        setError(true);
+        setLoading(false);
+        console.error('No data', error);
+        
       });
     ;}
 
@@ -36,11 +50,11 @@ function Flightdetails() {
           />
           <button className="Searchbutton" onClick={(handleSearch)}>search</button>
         </div>
-      {flightData ? (
-        <pre>{JSON.stringify(flightData, null, 2)}</pre>
-      ) : (
-        <p>Loading flight info...</p>
-      )}
+      <div style={{ textAlign: "center", marginTop: "20px" }}>
+        {loading && <p>Loading flight info...</p>}
+        {error && <p>Flight not found.</p>}
+        {flightData && <pre>{JSON.stringify(flightData, null, 2)}</pre>}
+      </div>
     </div>
 
     
