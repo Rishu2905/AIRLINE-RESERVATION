@@ -21,6 +21,7 @@ function FlightSearchPage() {
 
   // Search flights action
   const handleSearch = async () => {
+    // setFlights(null);
     try {
       const response = await axios.get(`http://localhost:5000/api/flight/${from}/${to}`);
       setFlights(response.data);
