@@ -22,7 +22,7 @@ function FlightSearchPage() {
   // Search flights action
   const handleSearch = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/flight");
+      const response = await axios.get(`http://localhost:5000/api/flight/${from}/${to}`);
       setFlights(response.data);
     } catch (err) {
       console.error("Error fetching flights:", err);
@@ -121,6 +121,37 @@ function FlightSearchPage() {
           </button>
         </div>
       </div>
+
+      {/* returning results of search */}
+      <div style={{ marginTop: "30px", textAlign: "center" }}>
+  {flights.length > 0 ? (
+    <ul style={{ listStyle: "none", padding: 0 }}>
+      {flights.map((flight, index) => (
+        <li
+          key={index}
+          style={{
+            margin: "10px auto",
+            padding: "15px",
+            border: "1px solid #ccc",
+            borderRadius: "12px",
+            maxWidth: "400px",
+            backgroundColor: "#f9f9f9",
+          }}
+        >
+          ✈️ {flight.flight_no}  
+          <br />
+          {flight.origin} → {flight.destination}  
+          <br />
+          Departure: {flight.departure_time}  
+          <br />
+          Arrival: {flight.arrival_time}
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p style={{ color: "gray" }}>No flights found yet. Try searching.</p>
+  )}
+</div>
     </div>
   );
 }

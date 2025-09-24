@@ -7,7 +7,7 @@ function Flightdetails() {
 
   const handleSearch = () =>{
 
-    axios.get(`http://localhost:5000/api/flight/${flightNo}`)
+    axios.get(`http://localhost:5000/api/flight/${flightNo}`) // sending a get request which is recieved by server.js using .get
       .then(response => {
         setFlightData(response.data);
       })
