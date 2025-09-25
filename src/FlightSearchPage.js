@@ -21,11 +21,22 @@ function FlightSearchPage() {
 
   // Search flights action
   const handleSearch = async () => {
-    // setFlights(null);
+    setFlights([]);
+    if (!from || !to){
+      setFlights([]);
+      return
+    }
     try {
+      
       const response = await axios.get(`http://localhost:5000/api/flight/${from}/${to}`);
+      if (response.data.length>0)
+        {
       setFlights(response.data);
-    } catch (err) {
+      }
+      else 
+      {setFlights([]);}
+    }
+    catch (err) {
       console.error("Error fetching flights:", err);
     }
   };
@@ -150,7 +161,9 @@ function FlightSearchPage() {
       ))}
     </ul>
   ) : (
-    <p style={{ color: "gray" }}>No flights found yet. Try searching.</p>
+    <p style={{ color: "gray" }}>
+      {from && to ? "No flights found" : "Please enter origin and destination"}
+    </p>
   )}
 </div>
     </div>
