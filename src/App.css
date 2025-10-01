@@ -27,6 +27,24 @@
 .App-link {
   color: #61dafb;
 }
+.container {
+  display: flex;
+  align-items: center; /* vertically align if needed */
+  gap: 20px;           /* space between left and right */
+  margin: 20px;
+}
+.left {
+  background-color: #d0e6ff;
+  padding: 20px;
+  flex: 2;             /* takes more space */
+  border-radius: 8px;
+}
+
+.right {
+  flex: 1;             /* smaller space for button */
+  display: flex;
+  align-items: center; /* center button vertically */
+}
 
 @keyframes App-logo-spin {
   from {

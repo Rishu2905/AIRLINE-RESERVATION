@@ -3,9 +3,14 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./FlightSearchPage.css";
 import axios from "axios";
+import "./App.css";
 
 
-
+function reverseDate(date){
+  const parts = date.split('-'); // Splits into ["yyyy", "mm", "dd"]
+  const reversedParts = parts.reverse(); // Reverses to ["dd", "mm", "yyyy"]
+  return reversedParts.join('-');
+}
 function FlightSearchPage() {
   const navigate = useNavigate();
   const [from, setFrom] = useState("");
@@ -22,16 +27,19 @@ function FlightSearchPage() {
   // Search flights action
   const handleSearch = async () => {
     setFlights([]);
-    if (!from || !to){
+    if (!from || !to || !date){
       setFlights([]);
-      return
+      return 
     }
     try {
       
-      const response = await axios.get(`http://localhost:5000/api/flight/${from}/${to}`);
+      const response = await axios.get(`http://localhost:5000/api/flight/${from}/${to}/${date}`);
       if (response.data.length>0)
         {
       setFlights(response.data);
+
+      // console.log((flights[0]["origin"]).substring(0,4));
+      console.log(response.data); 
       }
       else 
       {setFlights([]);}
@@ -39,6 +47,8 @@ function FlightSearchPage() {
     catch (err) {
       console.error("Error fetching flights:", err);
     }
+    
+    
   };
 
   return (
@@ -131,41 +141,98 @@ function FlightSearchPage() {
           >
             🔍
           </button>
+          
         </div>
       </div>
 
       {/* returning results of search */}
-      <div style={{ marginTop: "30px", textAlign: "center" }}>
+      <div className="resulrcard" style={{ display: "flex", gap: "10px" }}>
   {flights.length > 0 ? (
     <ul style={{ listStyle: "none", padding: 0 }}>
       {flights.map((flight, index) => (
         <li
           key={index}
           style={{
-            margin: "10px auto",
+            margin: "15px auto",
             padding: "15px",
-            border: "1px solid #ccc",
-            borderRadius: "12px",
-            maxWidth: "400px",
-            backgroundColor: "#f9f9f9",
+            border: "1px solid #000",
+            borderRadius: "8px",
+            backgroundColor: "#e0e0e0",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "20px",
           }}
         >
-          ✈️ {flight.flight_no}  
-          <br />
-          {flight.origin} → {flight.destination}  
-          <br />
-          Departure: {flight.departure_time}  
-          <br />
-          Arrival: {flight.arrival_time}
+          {/* Airline details */}
+          <div style={{  padding: "15px", minWidth: "120px", textAlign: "center" }}>
+            {flight.name || "Airline details"}
+          </div>
+
+          {/* Route details */}
+          <div style={{ display: "flex", alignItems: "center", gap: "30px" }}>
+            {/* From + Date */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <div style={{  padding: "8px 12px" }}>
+                {flight.origin}
+              </div>
+              <div style={{ padding: "8px 12px", marginTop: "8px" }}>
+                {reverseDate(flight.departure_time.substring(0,10))}
+              </div>
+              <div style={{  padding: "4px 8px", marginTop: "2px" }}>
+                {flight.departure_time.substring(11,19)}
+              </div>
+            </div>
+
+            {/* Duration */}
+            <div style={{  padding: "8px 12px" }}>
+              {flight.duration || "Duration"}
+            </div>
+
+            {/* Destination + Date */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <div style={{  padding: "8px 12px" }}>
+                {flight.destination}
+              </div>
+              <div style={{  padding: "8px 12px", marginTop: "2px" }}>
+                {reverseDate(flight.arrival_time.substring(0,10))}
+              </div>
+              <div style={{  padding: "4px 8px", marginTop: "2px" }}>
+                {flight.arrival_time.substring(11,19)}
+              </div>
+            </div>
+          </div>
+
+          {/* Price + Book button */}
+          <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+            <div style={{  padding: "10px 20px" }}>
+              ₹{flight.price || "N/A"}
+            </div>
+            <button
+              style={{
+                padding: "8px 15px",
+                border: "1px solid black",
+                borderRadius: "6px",
+                backgroundColor: "#f0f0f0",
+                cursor: "pointer",
+              }}
+              onClick={() => alert(`Booking flight ${flight.flight_number}`)}
+            >
+              Book
+            </button>
+          </div>
         </li>
       ))}
     </ul>
   ) : (
     <p style={{ color: "gray" }}>
-      {from && to ? "No flights found" : "Please enter origin and destination"}
+      {from && to && date ? "No flights found" : "Please enter origin destination and date"}
     </p>
   )}
 </div>
+
+
+
     </div>
   );
 }
