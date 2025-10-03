@@ -56,7 +56,7 @@ function FlightSearchPage() {
       setFlights(response.data);
 
       // console.log((flights[0]["origin"]).substring(0,4));
-      console.log(response.data);
+      // console.log(response.data);
       }
       else 
       {setFlights([]);}
