@@ -11,6 +11,23 @@ function reverseDate(date){
   const reversedParts = parts.reverse(); // Reverses to ["dd", "mm", "yyyy"]
   return reversedParts.join('-');
 }
+function parseTimeString(timeString) {
+  // Expecting input like "08:00:00"
+  const [hours, minutes, seconds] = timeString.split(":").map(Number);
+
+  // Create a new Date with today's date
+  const date = new Date();
+  date.setHours(hours, minutes, seconds, 0);
+
+  return date;
+}
+function fixISTTime(wrongDate) {
+  // wrongDate is a JS Date object that has been shifted incorrectly
+  // add back the IST offset (5h30m)
+  const newdate=parseTimeString(wrongDate);
+  const corrected = new Date(newdate.getTime() + (5.5 * 60 * 60 * 1000));
+  return corrected.toLocaleTimeString();
+}
 function FlightSearchPage() {
   const navigate = useNavigate();
   const [from, setFrom] = useState("");
@@ -39,7 +56,7 @@ function FlightSearchPage() {
       setFlights(response.data);
 
       // console.log((flights[0]["origin"]).substring(0,4));
-      console.log(response.data); 
+      console.log(response.data);
       }
       else 
       {setFlights([]);}
@@ -180,7 +197,7 @@ function FlightSearchPage() {
                 {reverseDate(flight.departure_time.substring(0,10))}
               </div>
               <div style={{  padding: "4px 8px", marginTop: "2px" }}>
-                {flight.departure_time.substring(11,19)}
+                {fixISTTime(reverseDate(flight.departure_time.substring(11,19)))}
               </div>
             </div>
 
@@ -198,7 +215,7 @@ function FlightSearchPage() {
                 {reverseDate(flight.arrival_time.substring(0,10))}
               </div>
               <div style={{  padding: "4px 8px", marginTop: "2px" }}>
-                {flight.arrival_time.substring(11,19)}
+                {fixISTTime(flight.arrival_time.substring(11,19))}
               </div>
             </div>
           </div>
