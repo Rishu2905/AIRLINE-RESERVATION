@@ -56,7 +56,7 @@ function FlightSearchPage() {
       setFlights(response.data);
 
       // console.log((flights[0]["origin"]).substring(0,4));
-      console.log(response.data);
+      // console.log(response.data);
       }
       else 
       {setFlights([]);}
@@ -233,9 +233,7 @@ function FlightSearchPage() {
                 backgroundColor: "#f0f0f0",
                 cursor: "pointer",
               }}
-              onClick={() => alert(`Booking flight ${flight.flight_number}`)}
-            >
-              Book
+              onClick={() => navigate("/Bookflight")}>Book
             </button>
           </div>
         </li>
