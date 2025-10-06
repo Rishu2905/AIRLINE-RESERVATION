@@ -1,21 +1,30 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
+// import handleSearch from "FlightSearchPage";
 function Bookflight(){
     const [firstname,setfirstName]=useState("");
     const [lastname,setlastName]=useState("");
     const [email,setEmail]=useState("");
     const [number,setNumber]=useState("");
     const [message,setMessage]=useState("");
+    const [data,setData]=useState("");
 
 
-    const addData =() =>{
+    const addData = async () =>{
         try{
-        axios.post('http://localhost:5000/api/flightbookings/',
+        const response=await axios.post('http://localhost:5000/api/flightbookings',
             {firstname,lastname,email,number}
             
         )
-        console.log('added successfully');}
+        if (response.data)
+        {
+            console.log("record fetched");
+        setData(response.data);
+        // console.log(data);
+
+      }
+        console.log('added successfully');
+        console.log(data);}
         
         catch (err){
             console.error('couldnt book',err);
