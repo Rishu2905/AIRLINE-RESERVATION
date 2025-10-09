@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useParams } from "react-router-dom";
 // import handleSearch from "FlightSearchPage";
 function Bookflight(){
+    const { flightNumber } = useParams();
+    // console.log("Flight number:", flightNumber);
+
     const [firstname,setfirstName]=useState("");
     const [lastname,setlastName]=useState("");
     const [email,setEmail]=useState("");
@@ -13,14 +17,14 @@ function Bookflight(){
     const addData = async () =>{
         try{
         const response=await axios.post('http://localhost:5000/api/flightbookings',
-            {firstname,lastname,email,number}
+            {firstname,lastname,email,number,flightNumber}
             
         )
         if (response.data)
         {
             console.log("record fetched");
         setData(response.data);
-        // console.log(data);
+        // console.log(flightNumber);
 
       }
         console.log('added successfully');
