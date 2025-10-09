@@ -14,7 +14,7 @@ function App() {
         <Route path="/signup" element={<h2>Signup Page</h2>} />
         <Route path = "/booking-status" element={<Bookingstatus />} />
         <Route path="/flightdetails" element={<Flightdetails /> } /> 
-        <Route path="/bookflight" element={<Bookflight />} />
+        <Route path="/bookflight/:flightNumber" element={<Bookflight />} />
         {/* <Flightdetails /> */}
       </Routes>
     </Router>

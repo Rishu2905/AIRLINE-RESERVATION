@@ -34,6 +34,7 @@ function FlightSearchPage() {
   const [to, setTo] = useState("");
   const [date, setDate] = useState("");
   const [flights, setFlights] = useState([]);
+  const [fno,setFno]=useState("");
 
   // Swap origin & destination
   const swapLocations = () => {
@@ -46,6 +47,7 @@ function FlightSearchPage() {
     setFlights([]);
     if (!from || !to || !date){
       setFlights([]);
+      setFno([]);
       return 
     }
     try {
@@ -54,12 +56,13 @@ function FlightSearchPage() {
       if (response.data.length>0)
         {
       setFlights(response.data);
+      setFno(flights[0]["flight_number"]);
 
-      // console.log((flights[0]["origin"]).substring(0,4));
-      // console.log(response.data);
+      // console.log((flights[0]["flight_number"]));
+      // console.log(fno);
       }
       else 
-      {setFlights([]);}
+      {setFlights([]); setFno([]);}
     }
     catch (err) {
       console.error("Error fetching flights:", err);
@@ -233,7 +236,7 @@ function FlightSearchPage() {
                 backgroundColor: "#f0f0f0",
                 cursor: "pointer",
               }}
-              onClick={() => navigate("/Bookflight")}>Book
+              onClick={() => navigate(`/bookflight/${fno}`, { state: flight })}>Book
             </button>
           </div>
         </li>
