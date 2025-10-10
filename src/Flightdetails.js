@@ -19,7 +19,7 @@ function Flightdetails() {
         }
         else {
           setError(true);
-        }
+        } 
         setLoading(false);
       })
       .catch(error => {
