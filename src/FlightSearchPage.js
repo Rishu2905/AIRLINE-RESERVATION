@@ -65,7 +65,7 @@ function FlightSearchPage() {
       {setFlights([]); setFno([]);}
     }
     catch (err) {
-      console.error("Error fetching flights:", err);
+      console.error("Error fettching flights:", err);
     }
     
     

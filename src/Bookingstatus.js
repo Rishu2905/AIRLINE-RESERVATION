@@ -4,22 +4,34 @@ import axios from 'axios';
 function Bookingstatus(){
     const [bookingdata,setBookingdata]=useState(null);
     const [bookingid,setBookingid]=useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
     
 
     const handleSearch = ()=>{
         setBookingdata(null);
-        setBookingid(null);
+        setLoading(true); 
+        setError(false); 
+        // setBookingid(null);
         
         try{
-        axios.get(`http://localhost:5000/api/booking/${bookingid}`)
+        axios.get(`http://localhost:5000/api/booking-status/${bookingid}`)
         .then(response=>{
-            if (response.length>0){
-                setBookingdata(response);
+            // console.log("req processed",response.data)
+            if (response.data.length>0){
+                setBookingdata(response.data);
+                // setBookingid(null);
             }
-            else{setBookingdata(null);}
+            else{setError(true); setBookingdata(null); //setBookingid(null);
+
+            }
+            setLoading(false);
     })}
     catch (err){
+        setLoading(false);
+        setError(true);
         console.error('error fetching flight',err);
+        // setBookingid(null);
     }
     }
 
@@ -52,6 +64,11 @@ return (
           >
             🔍
           </button>
+          <div style={{ textAlign: "center", marginTop: "20px" }}>
+        {loading && <p>Loading booking info...</p>}
+        {error && <p>Booking not found.</p>}
+        {bookingdata && <pre>{JSON.stringify(bookingdata, null, 2)}</pre>}
+      </div>
           </div>
 );}
 export default Bookingstatus;
